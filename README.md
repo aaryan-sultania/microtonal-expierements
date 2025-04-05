@@ -1,2 +1,2 @@
-# microtonal-expierements
-A Hack-The-Nest project experimenting with microtonal music and harmony.
+# not-chopin-composer
+A Hack-The-Nest project experimenting with algorithmic music
