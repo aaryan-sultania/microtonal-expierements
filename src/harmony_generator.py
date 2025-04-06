@@ -2,6 +2,7 @@ import music21
 import func_chords
 from transitions import major_transitions, minor_transitions
 import random
+from copy import deepcopy
 
 def translateNote(in_note: tuple, key="M"):
     n1string = ""
@@ -136,10 +137,10 @@ def genM21ChordArray(func_harmony, func_transition, key):
                 #print(rule[0], len(previous_chord_notes))
                 p1 = previous_chord_notes[rule[0]].pitch
                 for anote in previous_chord:
-                    new_note = previous_chord_notes[rule[1]]
+                    new_note = this_chord_notes[rule[1]]
                     if p1.pitchClass == anote.pitch.pitchClass:
                         moveNoteClosest(anote, new_note)
-                    this_chord.append(new_note)
+                        this_chord.append(new_note)
             current_lowest_note = min(this_chord, key=lambda obj: obj.pitch.ps)
             
         if current_lowest_note.pitch.pitchClass != this_chord_notes[func_harmony[idx][1]].pitch.pitchClass:
@@ -147,11 +148,15 @@ def genM21ChordArray(func_harmony, func_transition, key):
             moveNoteClosestLower(current_lowest_note, new_note)
             current_lowest_note = new_note
             this_chord.append(new_note)
-            
+        
+        chord_missing_tones = []
         for cnote in this_chord_notes:
             if not any(x.pitch.pitchClass == cnote.pitch.pitchClass for x in this_chord):
-                moveNoteClosestHigher(current_lowest_note, cnote)
-                this_chord.append(cnote)
+                chord_missing_tones.append(cnote)
+        for mt in chord_missing_tones:
+            new_note = deepcopy(mt)
+            moveNoteClosestHigher(current_lowest_note, new_note)
+            this_chord.append(new_note)
         m21_chord_array.append(this_chord)
 
 

@@ -4,6 +4,13 @@ import random
 import motif_generator
 from copy import deepcopy
 
+semitone_key = input("Please enter a key (0 for C, 1 for C#, etc): ")
+tonality = input("Please enter a tonality (0 for Major, 1 for Minor): ")
+texture = input("Please enter a style (0 for Waltz, 1 for March, 2 for Sonataina): ")
+seed = input("Please enter a random number seed: ")
+
+random.seed(seed)
+
 mainscore = music21.stream.Score()
 
 def genLeftHandMeasures(note_array):
@@ -20,6 +27,8 @@ def genLeftHandMeasures(note_array):
         lefthand.append(base_note)
         lefthand.append(chord_note)
         lefthand.append(other_chord_note)
+        if base_note.pitch.octave <= 1:
+            lefthand.transpose(12)
         lefthandphrase.append(lefthand)
     return lefthandphrase
 
@@ -39,7 +48,7 @@ def genRightHandMeasures(note_array, rhythm):
 righthandpart = music21.stream.Part()
 lefthandpart = music21.stream.Part()
 
-random.seed(42)
+
 
 note_array_1 = (harmony_generator.genM21ChordArray(*harmony_generator.genFuncHarmony("m", 0), "m"))
 note_array_2 = (harmony_generator.genM21ChordArray(*harmony_generator.genFuncHarmony("m", 0), "m"))
@@ -68,10 +77,10 @@ lhv2 = genLeftHandMeasures(note_array_2)
 lhv3 = genLeftHandMeasures(note_array_3)
 lhv4 = genLeftHandMeasures(note_array_4)
 
-rhv1 = genRightHandMeasures(note_array_1, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
-rhv2 = genRightHandMeasures(note_array_2, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
-rhv3 = genRightHandMeasures(note_array_3, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
-rhv4 = genRightHandMeasures(note_array_4, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
+rhv1 = genRightHandMeasures(note_array_1, motif_generator.genRhythmicMotif(3, (2, 4, 6, 8)))
+rhv2 = genRightHandMeasures(note_array_2, motif_generator.genRhythmicMotif(3, (2, 4, 6, 8)))
+rhv3 = genRightHandMeasures(note_array_3, motif_generator.genRhythmicMotif(3, (2, 4, 6, 8)))
+rhv4 = genRightHandMeasures(note_array_4, motif_generator.genRhythmicMotif(3, (2, 4, 6, 8)))
 
 for meas in lhv1:
     lefthandpart.append(meas)
@@ -103,5 +112,6 @@ for meas in rhv2:
     make_copy = deepcopy(meas)
     righthandpart.append(make_copy)
 
+mainscore.transpose(16)
 mainscore.write("musicxml", "output.xml")
 mainscore.write("midi", "output.midi")
