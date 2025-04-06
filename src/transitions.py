@@ -25,7 +25,7 @@ major_transitions = (
     Transition(func_chords.major_chord_I, (0, 1), func_chords.major_chord_viio7, (0, 1), None, 80),
 
     Transition(func_chords.major_chord_V, (0, 1, 2), func_chords.major_chord_I, (0,), ((1, 0),), 0),
-    Transition(func_chords.major_chord_V, (0, 1, 2), func_chords.major_chord_vi, (0, 1, 2), None, 20),  
+    Transition(func_chords.major_chord_V, (0, 1, 2), func_chords.major_chord_VI, (0, 1, 2), None, 20),  
     Transition(func_chords.major_chord_IV, (0, 1, 2), func_chords.major_chord_I, (0,), ((0, 1), (1, 2)), 0),
     Transition(func_chords.major_chord_IV, (0, 1, 2), func_chords.major_chord_V, (0, 1, 2), None, 0),
     Transition(func_chords.major_chord_IV, (0,), func_chords.major_chord_iv, (0,), ((1, 1),), 60),
@@ -51,5 +51,51 @@ major_transitions = (
     Transition(func_chords.major_chord_viio7, (0, 1, 2, 3), func_chords.major_chord_I, (0,), None, 80),
 
     Transition(func_chords.major_chord_I, (2,), func_chords.major_chord_V, (0,), None, 0),
-    Transition(func_chords.major_chord_vi, (0, 1, 2), func_chords.major_chord_I, (0,), None, 0)
+    Transition(func_chords.major_chord_VI, (0, 1, 2), func_chords.major_chord_I, (0,), None, 0)
+)
+
+minor_transitions = (
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_V, (0, 1, 2), None, 0),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_iv, (0, 2), None, 5),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_bII, (1,), None, 15),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_itaug6, (0,), None, 40),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_fraug6, (0,), None, 40),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_graug6, (0,), None, 40),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_V7, (0,), None, 5),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_V7_V, (0,), None, 10),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_viihalfo7, (0, 1, 2, 3), None, 60),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_iihalfo7, (0, 1, 2, 3), None, 60),
+    Transition(func_chords.minor_chord_i, (0, 1), func_chords.minor_chord_viio7, (0, 1), None, 80),
+
+    Transition(func_chords.minor_chord_V, (0, 1, 2), func_chords.minor_chord_i, (0,), ((1, 0),), 0),
+    Transition(func_chords.minor_chord_V, (0, 1, 2), func_chords.minor_chord_VI, (0, 1, 2), None, 20),  
+    Transition(func_chords.minor_chord_iv, (0, 1, 2), func_chords.minor_chord_i, (0,), ((0, 1), (1, 2)), 0),
+    Transition(func_chords.minor_chord_iv, (0, 1, 2), func_chords.minor_chord_V, (0, 1, 2), None, 0),
+
+
+    Transition(func_chords.minor_chord_ii, (0, 1, 2), func_chords.minor_chord_V, (0, 1, 2), ((1, 0), (2, 1)), 0),
+    Transition(func_chords.minor_chord_bII, (0, 1, 2), func_chords.minor_chord_V, (0, 1, 2), None, 0),
+
+    Transition(func_chords.minor_chord_itaug6, (0,), func_chords.minor_chord_i, (2,), ((0, 2), (2, 2)), 20),
+    Transition(func_chords.minor_chord_itaug6, (0,), func_chords.minor_chord_V, (0,), ((0, 1), (2, 1)), 20),
+    Transition(func_chords.minor_chord_fraug6, (0,), func_chords.minor_chord_i, (2,), ((0, 2), (3, 2)), 20),
+    Transition(func_chords.minor_chord_fraug6, (0,), func_chords.minor_chord_V, (0,), ((0, 1), (3, 1)), 20),
+    Transition(func_chords.minor_chord_graug6, (0,), func_chords.minor_chord_i, (2,), ((0, 2), (3, 2)), 20),
+    Transition(func_chords.minor_chord_graug6, (0,), func_chords.minor_chord_V, (0,), ((0, 1), (3, 1)), 20),
+
+    Transition(func_chords.minor_chord_V7, (0, 1, 2), func_chords.minor_chord_i, (0,), None, 0),
+    Transition(func_chords.minor_chord_V7_V, (0, 1, 2), func_chords.minor_chord_V, (0,), None, 0),
+
+    Transition(func_chords.minor_chord_viihalfo7, (0, 1, 2, 3), func_chords.minor_chord_i, (0, 1, 2), None, 60),
+    Transition(func_chords.minor_chord_iihalfo7, (0, 1, 2, 3), func_chords.minor_chord_i, (0, 1, 2), None, 60),
+    Transition(func_chords.minor_chord_viio7, (0, 1, 2, 3), func_chords.minor_chord_i, (0,), None, 80),
+
+    Transition(func_chords.minor_chord_i, (2,), func_chords.minor_chord_V, (0,), None, 0),
+    Transition(func_chords.minor_chord_VI, (0, 1, 2), func_chords.minor_chord_i, (0,), None, 0),
+
+    Transition(func_chords.minor_chord_iv, (0, 1, 2), func_chords.minor_chord_VII, (0,), ((0, 1), (1, 2)), 0),
+    Transition(func_chords.minor_chord_VII, (0, 1, 2), func_chords.minor_chord_III, (0,), ((0, 1), (1, 2)), 0),
+    Transition(func_chords.minor_chord_III, (0, 1, 2), func_chords.minor_chord_VI, (0,), ((0, 1), (1, 2)), 0),
+    Transition(func_chords.minor_chord_VI, (0, 1, 2), func_chords.minor_chord_iio, (0,), ((0, 1), (1, 2)), 0),
+    Transition(func_chords.minor_chord_iio, (0, 1, 2), func_chords.minor_chord_V, (0,), ((0, 1), (1, 2)), 0),
 )

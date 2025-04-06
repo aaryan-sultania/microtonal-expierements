@@ -2,7 +2,7 @@
 # A sharp is represented with a 1, natural with a 0, and flat with a -1
 # First note is always root, the other notes are in order of inversion
 
-# Triads in major keys.
+# Triads in Major keys.
 
 major_chord_I = ((1, 0), (3, 0), (5, 0))
 major_chord_i = ((1, 0), (3, -1), (5, 0))
@@ -11,7 +11,7 @@ major_chord_II = ((2, 0), (4, 1), (6, 0))
 major_chord_ii = ((2, 0), (4, 0), (6, 0))
 
 major_chord_III = ((3, 0), (5, 1), (7, 0))
-major_chord_iii = ((4, 0), (6, 0), (1, 0))
+major_chord_iii = ((3, 0), (5, 0), (7, 0))
 
 major_chord_IV = ((4, 0), (6, 0), (1, 0))
 major_chord_iv = ((4, 0), (6, -1), (1, 0))
@@ -39,3 +39,45 @@ major_chord_graug6 = ((6, -1), (1, 0), (3, -1), (4, 1))
 
 # Other Cool Chords in Major Keys
 major_chord_bII = ((2, -1), (4, 0), (6, -1)) 
+
+# Triads in Minor keys.
+
+minor_chord_I = ((1, 0), (3, 1), (5, 0))
+minor_chord_i = ((1, 0), (3, 0), (5, 0))
+
+minor_chord_II = ((2, 0), (4, 1), (6, 1))
+minor_chord_ii = ((2, 0), (4, 0), (6, 1))
+minor_chord_iio = ((2, 0), (4, 0), (6, 0))
+
+minor_chord_III = ((3, 0), (5, 0), (7, 0))
+minor_chord_iii = ((3, 0), (5, -1), (7, 0))
+minor_chord_iiiaug = ((3, 0), (5, 0), (7, 1))
+
+minor_chord_IV = ((4, 0), (6, 1), (1, 0))
+minor_chord_iv = ((4, 0), (6, 0), (1, 0))
+
+minor_chord_V = ((5, 0), (7, 1), (2, 0))
+minor_chord_v = ((5, 0), (7, 0), (2, 0)) 
+
+minor_chord_VI = ((6, 0), (1, 0), (3, 0))
+minor_chord_vi = ((6, 0), (1, -1), (3, 0))
+
+minor_chord_VII = ((7, 0), (2, 0), (4, 0))
+minor_chord_vii = ((7, 0), (2, -1), (4, 0))
+
+minor_chord_viio = ((7, 1), (2, 0), (4, 0))
+
+# Common Seventh Chords in Minor Keys
+minor_chord_V7 = ((5, 0), (7, 1), (2, 0), (4, 0)) # Dominant 7th Chord
+minor_chord_V7_V = ((2, 0), (4, 1), (6, 1), (1, 0)) # Secondary Dominant 7th Chord
+minor_chord_viio7 = ((7, 1), (2, 0), (4, 0), (6, 0)) # Diminished 7th Chord
+minor_chord_viihalfo7 = ((7, 1), (2, 0), (4, 0), (6, 1)) # Half Diminished 7th Chord
+minor_chord_iihalfo7 = ((2, 0), (4, 0), (6, 0), (1, 0)) # A different Half Diminished 7th Chord
+
+# Augmented 6th Chords in Minor Keys
+minor_chord_itaug6 = ((6, -1), (1, 0), (4, 1)) 
+minor_chord_fraug6 = ((6, -1), (1, 0), (2, 0),  (4, 1))
+minor_chord_graug6 = ((6, -1), (1, 0), (3, 0), (4, 1))
+
+# Other Cool Chords in Minor Keys
+minor_chord_bII = ((2, -1), (4, 0), (6, 0))

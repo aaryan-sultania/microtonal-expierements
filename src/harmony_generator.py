@@ -1,24 +1,40 @@
 import music21
 import func_chords
-from transitions import major_transitions
+from transitions import major_transitions, minor_transitions
 import random
 
-def translateNote(in_note: tuple):
+def translateNote(in_note: tuple, key="M"):
     n1string = ""
-    if in_note[0] == 1:
-        n1string = "C3"
-    elif in_note[0] == 2:
-        n1string = "D3"
-    elif in_note[0] == 3:
-        n1string = "E3"
-    elif in_note[0] == 4:
-        n1string = "F3"
-    elif in_note[0] == 5:
-        n1string = "G3"
-    elif in_note[0] == 6:
-        n1string = "A3"
-    elif in_note[0] == 7:
-        n1string = "B3"
+    if key=="M":
+        if in_note[0] == 1:
+            n1string = "C3"
+        elif in_note[0] == 2:
+            n1string = "D3"
+        elif in_note[0] == 3:
+            n1string = "E3"
+        elif in_note[0] == 4:
+            n1string = "F3"
+        elif in_note[0] == 5:
+            n1string = "G3"
+        elif in_note[0] == 6:
+            n1string = "A3"
+        elif in_note[0] == 7:
+            n1string = "B3"
+    if key=="m":
+        if in_note[0] == 1:
+            n1string = "A2"
+        elif in_note[0] == 2:
+            n1string = "B2"
+        elif in_note[0] == 3:
+            n1string = "C3"
+        elif in_note[0] == 4:
+            n1string = "D3"
+        elif in_note[0] == 5:
+            n1string = "E3"
+        elif in_note[0] == 6:
+            n1string = "F3"
+        elif in_note[0] == 7:
+            n1string = "G3"
     
     n1 = music21.note.Note(n1string);
 
@@ -57,15 +73,15 @@ def genRandomIndex(array):
         return 0
     return random.randint(0, len(array) - 1)
 
-def genFuncHarmony(maj_or_min, flavor):
+def genFuncHarmony(key, flavor):
     harmony_array = []
     transition_array = []
-    harmony_array.append((func_chords.major_chord_I, 0))
-    next_chord = (func_chords.major_chord_I, 0)
+    harmony_array.append((func_chords.minor_chord_i, 0))
+    next_chord = (func_chords.minor_chord_i, 0)
 
     while len(harmony_array) < 8:
         possible_transitions = []
-        for transition in major_transitions:
+        for transition in minor_transitions:
             if (next_chord[0] == transition.chord1 and next_chord[1] in transition.inv1):
                 possible_transitions.append(transition)
 
@@ -87,12 +103,12 @@ def genFuncHarmony(maj_or_min, flavor):
 # For future refrence:
 # If a varible name has "_notes" at the end, it represents a collection of tones without a specifc register
 
-def genM21ChordArray(func_harmony, func_transition):
+def genM21ChordArray(func_harmony, func_transition, key):
     m21ify_func_harm_notes = []
     for f_chord in func_harmony:
         m21ify_chord_notes = []
         for f_degree in f_chord[0]:
-            m21ify_chord_notes.append(translateNote(f_degree))
+            m21ify_chord_notes.append(translateNote(f_degree, key))
         m21ify_func_harm_notes.append(m21ify_chord_notes)
 
     m21_chord_array = []
@@ -157,7 +173,8 @@ def moveNoteClosestLower(n1, n2):
         n2.pitch.octave += 1
         moveNoteClosestLower(n1, n2)
     else:
-        print(music21.interval.Interval(n1.pitch, n2.pitch).semitones)
+        pass
+        #print(music21.interval.Interval(n1.pitch, n2.pitch).semitones)
 
 def moveNoteClosestHigher(n1, n2):
     if music21.interval.Interval(n1.pitch, n2.pitch).semitones < 0:
