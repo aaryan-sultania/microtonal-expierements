@@ -4,9 +4,9 @@ from transitions import major_transitions, minor_transitions
 import random
 from copy import deepcopy
 
-def translateNote(in_note: tuple, key="M"):
+def translateNote(in_note: tuple, key=0):
     n1string = ""
-    if key=="M":
+    if key==0:
         if in_note[0] == 1:
             n1string = "C3"
         elif in_note[0] == 2:
@@ -21,7 +21,7 @@ def translateNote(in_note: tuple, key="M"):
             n1string = "A3"
         elif in_note[0] == 7:
             n1string = "B3"
-    if key=="m":
+    if key==1:
         if in_note[0] == 1:
             n1string = "A2"
         elif in_note[0] == 2:
@@ -79,11 +79,11 @@ def genFuncHarmony(key, flavor):
     transition_array = []
 
     list_of_transitions_in_key = []
-    if key == "M":
+    if key == 0:
         harmony_array.append((func_chords.major_chord_I, 0))
         next_chord = (func_chords.major_chord_I, 0)
         list_of_transitions_in_key = major_transitions
-    elif key == "m":
+    elif key == 1:
         harmony_array.append((func_chords.minor_chord_i, 0))
         next_chord = (func_chords.minor_chord_i, 0)
         list_of_transitions_in_key = minor_transitions
