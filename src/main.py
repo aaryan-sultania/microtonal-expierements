@@ -7,7 +7,7 @@ from copy import deepcopy
 mainscore = music21.stream.Score()
 
 def genLeftHandMeasures(note_array):
-    lefthandphrase = music21.stream.Stream()
+    lefthandphrase = []
     for chor in note_array:
         lefthand = music21.stream.Measure()
         low_note = min(chor, key=lambda obj: obj.pitch.ps)
@@ -22,17 +22,18 @@ def genLeftHandMeasures(note_array):
         lefthand.append(other_chord_note)
         lefthandphrase.append(lefthand)
     return lefthandphrase
-    
-def genRightHandMeasures(note_array, rhythm1, melody1, rhythm2, melody2):
-    righthandphrase = music21.stream.Stream()
-    for idx, chor in enumerate(note_array):
-        melody_note = random.choice(chor).transpose(12)
-        melody_note.duration = music21.duration.Duration(quarterLength=2)
-        next_note = melody_note.transpose(-2)
-        next_note.duration = music21.duration.Duration(quarterLength=1)
-        ryth = rhythm1 if idx % 2 else rhythm2
-        meld = melody1 if idx % 2 else melody2
-        righthandphrase.append(motif_generator.genMelodyMeasure(chor, ryth, meld))
+
+def genRightHandMeasures(note_array, rhythm):
+    righthandphrase = []
+    for chor in note_array:
+        righthand = music21.stream.Measure()
+        for movement in rhythm:
+            not1 = deepcopy(random.choice(chor))
+            not1.pitch.octave = 5
+            not1.duration.quarterLength = movement/4
+            righthand.append(not1)
+            
+        righthandphrase.append(righthand)
     return righthandphrase
 
 righthandpart = music21.stream.Part()
@@ -44,50 +45,63 @@ note_array_1 = (harmony_generator.genM21ChordArray(*harmony_generator.genFuncHar
 note_array_2 = (harmony_generator.genM21ChordArray(*harmony_generator.genFuncHarmony("m", 0), "m"))
 note_array_3 = (harmony_generator.genM21ChordArray(*harmony_generator.genFuncHarmony("M", 0), "M"))
 note_array_4 = (harmony_generator.genM21ChordArray(*harmony_generator.genFuncHarmony("M", 0), "M"))
-rhythm11 = motif_generator.genRhythmicMotif(3, (1, 2, 3, 4))
-melody11 = motif_generator.genMelodicMotif(len(rhythm11))
-rhythm12 = motif_generator.genRhythmicMotif(3, (2, 4, 6, 8))
-melody12 = motif_generator.genMelodicMotif(len(rhythm12))
-rhythm21 = motif_generator.genRhythmicMotif(3, (1, 2, 3, 4))
-melody21 = motif_generator.genMelodicMotif(len(rhythm11))
-rhythm22 = motif_generator.genRhythmicMotif(3, (2, 4, 6, 8))
-melody22 = motif_generator.genMelodicMotif(len(rhythm12))
-rhythm31 = motif_generator.genRhythmicMotif(3, (1, 2, 3, 4))
-melody31 = motif_generator.genMelodicMotif(len(rhythm11))
-rhythm32 = motif_generator.genRhythmicMotif(3, (2, 4, 6, 8))
-melody32 = motif_generator.genMelodicMotif(len(rhythm12))
-rhythm41 = motif_generator.genRhythmicMotif(3, (1, 2, 3, 4))
-melody41 = motif_generator.genMelodicMotif(len(rhythm11))
-rhythm42 = motif_generator.genRhythmicMotif(3, (2, 4, 6, 8))
-melody42 = motif_generator.genMelodicMotif(len(rhythm12))
 
-print (note_array_1)
+
 ts = music21.meter.TimeSignature('3/4')
 mm = music21.tempo.MetronomeMark(number=120) # 120 bpm
 tc = music21.clef.TrebleClef()
 bc = music21.clef.BassClef()
 
-lefthandpart.append(ts)
-lefthandpart.append(mm)
-lefthandpart.append(bc)
-lefthandpart.append(genLeftHandMeasures(note_array_1))
-lefthandpart.append(genLeftHandMeasures(note_array_2))
-lefthandpart.append(genLeftHandMeasures(note_array_3))
-lefthandpart.append(genLeftHandMeasures(note_array_4))
-lefthandpart.append(genLeftHandMeasures(note_array_1))
-lefthandpart.append(genLeftHandMeasures(note_array_2))
-
 righthandpart.append(ts)
 righthandpart.append(mm)
 righthandpart.append(tc)
-righthandpart.append(genRightHandMeasures(note_array_1, rhythm11, melody11, rhythm12, melody12))
-righthandpart.append(genRightHandMeasures(note_array_2, rhythm21, melody21, rhythm22, melody22))
-righthandpart.append(genRightHandMeasures(note_array_3, rhythm31, melody31, rhythm32, melody32))
-righthandpart.append(genRightHandMeasures(note_array_4, rhythm41, melody41, rhythm42, melody42))
-righthandpart.append(genRightHandMeasures(note_array_1, rhythm11, melody11, rhythm12, melody12))
-righthandpart.append(genRightHandMeasures(note_array_2, rhythm21, melody21, rhythm22, melody22))
+
+lefthandpart.append(ts)
+lefthandpart.append(mm)
+lefthandpart.append(bc)
 
 mainscore.insert(0, righthandpart)
 mainscore.insert(0, lefthandpart)
 
-lefthandpart.write("musicxml", "output.xml")
+lhv1 = genLeftHandMeasures(note_array_1)
+lhv2 = genLeftHandMeasures(note_array_2)
+lhv3 = genLeftHandMeasures(note_array_3)
+lhv4 = genLeftHandMeasures(note_array_4)
+
+rhv1 = genRightHandMeasures(note_array_1, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
+rhv2 = genRightHandMeasures(note_array_2, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
+rhv3 = genRightHandMeasures(note_array_3, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
+rhv4 = genRightHandMeasures(note_array_4, motif_generator.genRhythmicMotif(3, (1, 2, 3, 4)))
+
+for meas in lhv1:
+    lefthandpart.append(meas)
+for meas in lhv2:
+    lefthandpart.append(meas)
+for meas in lhv3:
+    lefthandpart.append(meas)
+for meas in lhv4:
+    lefthandpart.append(meas)
+for meas in lhv1:
+    make_copy = deepcopy(meas)
+    lefthandpart.append(make_copy)
+for meas in lhv2:
+    make_copy = deepcopy(meas)
+    lefthandpart.append(make_copy)
+
+for meas in rhv1:
+    righthandpart.append(meas)
+for meas in rhv2:
+    righthandpart.append(meas)
+for meas in rhv3:
+    righthandpart.append(meas)
+for meas in rhv4:
+    righthandpart.append(meas)
+for meas in rhv1:
+    make_copy = deepcopy(meas)
+    righthandpart.append(make_copy)
+for meas in rhv2:
+    make_copy = deepcopy(meas)
+    righthandpart.append(make_copy)
+
+mainscore.write("musicxml", "output.xml")
+mainscore.write("midi", "output.midi")
