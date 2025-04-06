@@ -55,7 +55,6 @@ def convertChord(in_chord: tuple):
 def genRandomIndex(array):
     if len(array) == 1:
         return 0
-    print(len(array))
     return random.randint(0, len(array) - 1)
 
 def genFuncHarmony(maj_or_min, flavor):
@@ -63,6 +62,7 @@ def genFuncHarmony(maj_or_min, flavor):
     transition_array = []
     harmony_array.append((func_chords.major_chord_I, 0))
     next_chord = (func_chords.major_chord_I, 0)
+
     while len(harmony_array) < 8:
         possible_transitions = []
         for transition in major_transitions:
@@ -95,42 +95,52 @@ def genM21ChordArray(func_harmony, func_transition):
             m21ify_chord_notes.append(translateNote(f_degree))
         m21ify_func_harm_notes.append(m21ify_chord_notes)
 
-        m21_chord_array = []
-        for idx in range(len(m21ify_func_harm_notes)):
-            if idx == 0:
-                m21_chord_array.append(m21ify_func_harm_notes[idx])
-                continue
-            transit = func_transition(idx - 1)
-            previous_chord = m21_chord_array[idx - 1]
-            previous_chord_notes = m21ify_func_harm_notes[idx - 1]
-            this_chord_notes = m21ify_func_harm_notes[idx]
+    m21_chord_array = []
+    for idx in range(len(m21ify_func_harm_notes)):
+        if idx == 0:
+            m21_chord_array.append(m21ify_func_harm_notes[idx])
+            continue
+        transit = func_transition[idx - 1]
+        previous_chord = m21_chord_array[idx - 1]
+        previous_chord_notes = m21ify_func_harm_notes[idx - 1]
+        this_chord_notes = m21ify_func_harm_notes[idx]
 
-            this_chord = []
-
-            if transit.transition_rules:
-                for rule in transit.transition_rules:
-                    p1 = previous_chord_notes[rule[0]].pitch
-
-                    for anote in previous_chord:
-                        new_note = previous_chord_notes[rule[1]]
-                        if p1.pitchclass == anote.pitch.pitchclass:
-                            moveNoteClosest(anote, new_note)
-                        this_chord.append(new_note)
-                    
-                    
-
+        this_chord = []
+        current_lowest_note = music21.note.Note()
+        if transit.transition_rules != None:
+            for rule in transit.transition_rules:
+                #print(rule[0], len(previous_chord_notes))
+                p1 = previous_chord_notes[rule[0]].pitch
+                for anote in previous_chord:
+                    new_note = previous_chord_notes[rule[1]]
+                    if p1.pitchClass == anote.pitch.pitchClass:
+                        moveNoteClosest(anote, new_note)
+                    this_chord.append(new_note)
+            current_lowest_note = min(this_chord, key=lambda obj: obj.pitch.ps)
             
+        if current_lowest_note.pitch.pitchClass != this_chord_notes[func_harmony[idx][1]].pitch.pitchClass:
+            new_note = this_chord_notes[func_harmony[idx][1]]
+            moveNoteClosestLower(current_lowest_note, new_note)
+            current_lowest_note = new_note
+            this_chord.append(new_note)
+            
+        for cnote in this_chord_notes:
+            if not any(x.pitch.pitchClass == cnote.pitch.pitchClass for x in this_chord):
+                moveNoteClosestHigher(current_lowest_note, cnote)
+                this_chord.append(cnote)
+                m21_chord_array.append(this_chord)
+
 
     return m21ify_func_harm_notes
 
 def moveNoteClosest(n1, n2):
     
     n2.pitch.octave = n1.pitch.octave - 1
-    low_octave_int = abs(music21.interval(n1.pitch, n2.pitch).semitones)
+    low_octave_int = abs(music21.interval.Interval(n1.pitch, n2.pitch).semitones)
     n2.pitch.octave = n1.pitch.octave
-    same_octave_int = abs(music21.interval(n1.pitch, n2.pitch).semitones)
+    same_octave_int = abs(music21.interval.Interval(n1.pitch, n2.pitch).semitones)
     n2.pitch.octave = n1.pitch.octave + 1
-    high_octave_int = abs(music21.interval(n1.pitch, n2.pitch).semitones)
+    high_octave_int = abs(music21.interval.Interval(n1.pitch, n2.pitch).semitones)
 
     closest_int = min((low_octave_int, same_octave_int, high_octave_int))
     if closest_int == low_octave_int:
@@ -139,3 +149,20 @@ def moveNoteClosest(n1, n2):
         n2.pitch.octave = n1.pitch.octave
     elif closest_int == high_octave_int:
         n2.pitch.octave = n1.pitch.octave + 1
+def moveNoteClosestLower(n1, n2):
+    if music21.interval.Interval(n1.pitch, n2.pitch).semitones > 0:
+        n2.pitch.octave -= 1
+        moveNoteClosestLower(n1, n2)
+    if music21.interval.Interval(n1.pitch, n2.pitch).semitones < -11:
+        n2.pitch.octave += 1
+        moveNoteClosestLower(n1, n2)
+    else:
+        print(music21.interval.Interval(n1.pitch, n2.pitch).semitones)
+
+def moveNoteClosestHigher(n1, n2):
+    if music21.interval.Interval(n1.pitch, n2.pitch).semitones < 0:
+        n2.pitch.octave += 1
+        moveNoteClosestHigher(n1, n2)
+    if music21.interval.Interval(n1.pitch, n2.pitch).semitones > 11:
+        n2.pitch.octave -= 1
+        moveNoteClosestHigher(n1, n2)
