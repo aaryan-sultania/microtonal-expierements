@@ -84,6 +84,9 @@ def genFuncHarmony(maj_or_min, flavor):
         #   100 - abs(flavor - transition.flavor)
     return (harmony_array, transition_array)
 
+# For future refrence:
+# If a varible name has "_notes" at the end, it represents a collection of tones without a specifc register
+
 def genM21ChordArray(func_harmony, func_transition):
     m21ify_func_harm_notes = []
     for f_chord in func_harmony:
@@ -91,5 +94,48 @@ def genM21ChordArray(func_harmony, func_transition):
         for f_degree in f_chord[0]:
             m21ify_chord_notes.append(translateNote(f_degree))
         m21ify_func_harm_notes.append(m21ify_chord_notes)
+
+        m21_chord_array = []
+        for idx in range(len(m21ify_func_harm_notes)):
+            if idx == 0:
+                m21_chord_array.append(m21ify_func_harm_notes[idx])
+                continue
+            transit = func_transition(idx - 1)
+            previous_chord = m21_chord_array[idx - 1]
+            previous_chord_notes = m21ify_func_harm_notes[idx - 1]
+            this_chord_notes = m21ify_func_harm_notes[idx]
+
+            this_chord = []
+
+            if transit.transition_rules:
+                for rule in transit.transition_rules:
+                    p1 = previous_chord_notes[rule[0]].pitch
+
+                    for anote in previous_chord:
+                        new_note = previous_chord_notes[rule[1]]
+                        if p1.pitchclass == anote.pitch.pitchclass:
+                            moveNoteClosest(anote, new_note)
+                        this_chord.append(new_note)
+                    
+                    
+
+            
+
     return m21ify_func_harm_notes
+
+def moveNoteClosest(n1, n2):
     
+    n2.pitch.octave = n1.pitch.octave - 1
+    low_octave_int = abs(music21.interval(n1.pitch, n2.pitch).semitones)
+    n2.pitch.octave = n1.pitch.octave
+    same_octave_int = abs(music21.interval(n1.pitch, n2.pitch).semitones)
+    n2.pitch.octave = n1.pitch.octave + 1
+    high_octave_int = abs(music21.interval(n1.pitch, n2.pitch).semitones)
+
+    closest_int = min((low_octave_int, same_octave_int, high_octave_int))
+    if closest_int == low_octave_int:
+        n2.pitch.octave = n1.pitch.octave - 1
+    elif closest_int == same_octave_int:
+        n2.pitch.octave = n1.pitch.octave
+    elif closest_int == high_octave_int:
+        n2.pitch.octave = n1.pitch.octave + 1
