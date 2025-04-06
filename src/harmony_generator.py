@@ -76,12 +76,20 @@ def genRandomIndex(array):
 def genFuncHarmony(key, flavor):
     harmony_array = []
     transition_array = []
-    harmony_array.append((func_chords.minor_chord_i, 0))
-    next_chord = (func_chords.minor_chord_i, 0)
+
+    list_of_transitions_in_key = []
+    if key == "M":
+        harmony_array.append((func_chords.major_chord_I, 0))
+        next_chord = (func_chords.major_chord_I, 0)
+        list_of_transitions_in_key = major_transitions
+    elif key == "m":
+        harmony_array.append((func_chords.minor_chord_i, 0))
+        next_chord = (func_chords.minor_chord_i, 0)
+        list_of_transitions_in_key = minor_transitions
 
     while len(harmony_array) < 8:
         possible_transitions = []
-        for transition in minor_transitions:
+        for transition in list_of_transitions_in_key:
             if (next_chord[0] == transition.chord1 and next_chord[1] in transition.inv1):
                 possible_transitions.append(transition)
 
@@ -144,10 +152,10 @@ def genM21ChordArray(func_harmony, func_transition, key):
             if not any(x.pitch.pitchClass == cnote.pitch.pitchClass for x in this_chord):
                 moveNoteClosestHigher(current_lowest_note, cnote)
                 this_chord.append(cnote)
-                m21_chord_array.append(this_chord)
+        m21_chord_array.append(this_chord)
 
 
-    return m21ify_func_harm_notes
+    return m21_chord_array
 
 def moveNoteClosest(n1, n2):
     

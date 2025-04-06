@@ -6,6 +6,7 @@
 import random
 import music21
 import harmony_generator
+import copy
 
 def genRhythmicMotif(num_beats, possible_durations):
     rhythm = []
@@ -61,6 +62,7 @@ def genMelodicMotif(num_notes):
 def genMelodyMeasure(chord, rhythm, melody):
     musicArray = music21.stream.Stream()
     startTone = random.choice(chord)
+    startTone.octave = 5
 
     for idx, (r, m) in enumerate(zip(rhythm, melody)):
         new_note = music21.note.Note('C5')
@@ -68,17 +70,36 @@ def genMelodyMeasure(chord, rhythm, melody):
             new_note = startTone
         else:
             if m == 1:
-                new_note = musicArray[idx-1].transpose(2)
+                #print("A")
+                new_note = diatonic_transpose(musicArray[idx-1], 1)
             elif m == 2:
-                new_note = musicArray[idx-1].transpose(-2)
+                #print("B")
+                new_note = diatonic_transpose(musicArray[idx-1], -1)
             elif m == 3:
-                new_note = musicArray[idx-1].transpose(1)
+                #print("C")
+                new_note = diatonic_transpose(musicArray[idx-1], 1)
             elif m == 4:
-                new_note = musicArray[idx-1].transpose(-1)
+                #print("D")
+                new_note = diatonic_transpose(musicArray[idx-1], -1)
             elif m == 5:
+                #print("E")
                 random_chord_tone = random.choice(chord)
                 harmony_generator.moveNoteClosestHigher(musicArray[idx-1], random_chord_tone)
-                new_note = random_chord_tone
+                new_note = copy.deepcopy(random_chord_tone)
+            
         new_note.duration.quarterLength = r/4
-        musicArray.append(new_note)
+        test_thingy = new_note
+        musicArray.append(test_thingy)
     return musicArray
+
+def diatonic_transpose(note, dirrection):
+    if note.pitch.pitchClass == 11 and dirrection == 1:
+        return note.transpose(1)      
+    elif note.pitch.pitchClass == 0 and dirrection == -1:
+        return note.transpose(-1)
+    elif note.pitch.pitchClass == 4 and dirrection == 1:
+        return note.transpose(1)
+    elif note.pitch.pitchClass == 5 and dirrection == -1:
+        return note.transpose(-1)
+    else:
+        return note.transpose(2*dirrection)
