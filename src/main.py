@@ -61,6 +61,7 @@ melody41 = motif_generator.genMelodicMotif(len(rhythm11))
 rhythm42 = motif_generator.genRhythmicMotif(3, (2, 4, 6, 8))
 melody42 = motif_generator.genMelodicMotif(len(rhythm12))
 
+print (note_array_1)
 ts = music21.meter.TimeSignature('3/4')
 mm = music21.tempo.MetronomeMark(number=120) # 120 bpm
 tc = music21.clef.TrebleClef()
