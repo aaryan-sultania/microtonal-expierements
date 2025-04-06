@@ -36,7 +36,7 @@ major_transitions = (
     Transition(chords.major_chord_iv, (0, 1, 2), chords.major_chord_I, (0,), None, 0),
 
     Transition(chords.major_chord_ii, (0, 1, 2), chords.major_chord_V, (0, 1, 2), None, 0),
-    Transition(chords.major_chord_bII, (0, 1, 2), chords.major_chord_vi, (0, 1, 2), None, 0),
+    Transition(chords.major_chord_bII, (0, 1, 2), chords.major_chord_V, (0, 1, 2), None, 0),
 
     Transition(chords.major_chord_itaug6, (0,), chords.major_chord_I, (2,), None, 20),
     Transition(chords.major_chord_itaug6, (0,), chords.major_chord_V, (0,), None, 20),

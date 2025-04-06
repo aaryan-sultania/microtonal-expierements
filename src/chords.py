@@ -29,8 +29,8 @@ major_chord_viio = ((7, 0), (2, 0), (4, 0))
 # Common Seventh Chords in Major Keys
 major_chord_V7 = ((5, 0), (7, 0), (2, 0), (4, 0)) # Dominant 7th Chord
 major_chord_V7_V = ((2, 0), (4, 1), (6, 0), (1, 0)) # Secondary Dominant 7th Chord
-major_chord_viio7 = ((7, 0), (2, 0), (4, 0), (1, -1)) # Diminished 7th Chord
-major_chord_viihalfo7 = ((7, 0), (2, 0), (4, 0), (1, 0)) # Half Diminished 7th Chord
+major_chord_viio7 = ((7, 0), (2, 0), (4, 0), (6, -1)) # Diminished 7th Chord
+major_chord_viihalfo7 = ((7, 0), (2, 0), (4, 0), (6, 0)) # Half Diminished 7th Chord
 
 # Augmented 6th Chords in Major Keys
 major_chord_itaug6 = ((6, -1), (1, 0), (4, 1)) 
